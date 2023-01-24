@@ -1,7 +1,7 @@
-import Tasktrecker.Epic;
-import Tasktrecker.Manager;
-import Tasktrecker.SubTask;
-import Tasktrecker.Task;
+import taskTrecker.Epic;
+import taskTrecker.Manager;
+import taskTrecker.SubTask;
+import taskTrecker.Task;
 
 public class Main {
 
@@ -66,8 +66,9 @@ public class Main {
 
         System.out.println(manager);
 
-        manager.removeEpicTask(6);
+
         manager.removeTask(1);
+        manager.removeEpicTask(3);
         System.out.println(manager);
 
 

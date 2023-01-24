@@ -1,4 +1,4 @@
-package Tasktrecker;
+package taskTrecker;
 
 
 public class SubTask extends Task {
@@ -25,13 +25,9 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return "SubTask{" +
-                "epicObject=" + epicObject +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                ", id=" + id +
-                '}';
+        return super.toString() + '\'' + "epicObject=" + epicObject;
+
+
     }
 
     @Override

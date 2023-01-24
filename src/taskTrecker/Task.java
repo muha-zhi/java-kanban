@@ -1,11 +1,11 @@
-package Tasktrecker;
+package taskTrecker;
 
 
 
 public class Task {
     protected String name;
     protected String description;
-    protected String status;
+    protected String status = "NEW";
     int id;
 
     public String getStatus() {
@@ -48,7 +48,7 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" + "name='" + name + '\'' + ", description='" + description + '\'' + ", status='" + status + '\''
-                + ", id=" + id + '}';
+                + ", id=" + id + '}' + " ";
     }
 
     @Override
