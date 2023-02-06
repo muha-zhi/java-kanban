@@ -1,13 +1,10 @@
-import taskTrecker.Epic;
-import taskTrecker.Manager;
-import taskTrecker.SubTask;
-import taskTrecker.Task;
+import taskTrecker.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Manager manager = new Manager();
+        TaskManager manager = Managers.getDefault();
 
         Task task = new Task();
         task.setName("Сходить в магазин");
@@ -51,15 +48,15 @@ public class Main {
 
 
         Task updateTask2 = manager.getTask(2);
-        updateTask2.setStatus("DONE");
+        updateTask2.setStatus(StatusOfTask.DONE);
 
         SubTask updateSub1 = manager.getSubTask(4);
-        updateSub1.setStatus("DONE");
+        updateSub1.setStatus(StatusOfTask.DONE);
         manager.updateSubTask(updateSub1);
 
         SubTask updateSub3 = manager.getSubTask(7);
         if (updateSub3 != null) {
-            updateSub3.setStatus("DONE");
+            updateSub3.setStatus(StatusOfTask.DONE);
             manager.updateSubTask(updateSub3);
         }
 

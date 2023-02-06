@@ -1,14 +1,13 @@
 package taskTrecker;
 
 
-
 public class Task {
     protected String name;
     protected String description;
-    protected String status = "NEW";
+    protected StatusOfTask status = StatusOfTask.NEW;
     int id;
 
-    public String getStatus() {
+    public StatusOfTask getStatus() {
         return status;
     }
 
@@ -37,11 +36,11 @@ public class Task {
         this.description = description;
     }
 
-    public String isStatus() {
+    public StatusOfTask isStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusOfTask status) {
         this.status = status;
     }
 
