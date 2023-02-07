@@ -1,11 +1,11 @@
-package taskTrecker;
+package taskTrecker.Tasks;
 
 
 public class Task {
     protected String name;
     protected String description;
     protected StatusOfTask status = StatusOfTask.NEW;
-    int id;
+    private int id;
 
     public StatusOfTask getStatus() {
         return status;
@@ -55,17 +55,13 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && name.equals(task.name) && description.equals(task.description) && status.equals(task.status);
+        return  name.equals(task.name) && description.equals(task.description) && status.equals(task.status);
     }
 
     @Override
     public int hashCode() {
         int hash = 17;
-        if (id != 0) {
-            // вычисляем хеш первого поля и добавляем к нему начальное значение
-            hash = hash + id;
-        }
-        hash = hash * 31; // умножаем промежуточный результат на простое число
+        // умножаем промежуточный результат на простое число
 
         if (name != null) {
             // вычисляем хеш второго поля и добавляем его к общему результату

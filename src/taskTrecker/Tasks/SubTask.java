@@ -1,4 +1,4 @@
-package taskTrecker;
+package taskTrecker.Tasks;
 
 
 public class SubTask extends Task {

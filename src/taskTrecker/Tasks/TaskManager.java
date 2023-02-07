@@ -1,8 +1,10 @@
-package taskTrecker;
+package taskTrecker.Tasks;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import taskTrecker.Tasks.Epic;
+import taskTrecker.Tasks.SubTask;
+import taskTrecker.Tasks.Task;
+
 import java.util.List;
 import java.util.Map;
 

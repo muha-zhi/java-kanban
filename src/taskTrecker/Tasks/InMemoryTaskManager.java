@@ -1,4 +1,7 @@
-package taskTrecker;
+package taskTrecker.Tasks;
+
+import taskTrecker.*;
+import taskTrecker.history.HistoryManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +102,17 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
+        int keyOfTask = 0;
+        for(Integer key : tasks.keySet()){
+            Task task1 = tasks.get(key);
+            if(task1 != null) {
+                if (task.equals(task1)){
+                    keyOfTask = key;
+                }
+            }
+        }
+        tasks.remove(keyOfTask);
+
         tasks.put(task.getId(), task);
     }
 

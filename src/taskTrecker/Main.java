@@ -1,4 +1,6 @@
-import taskTrecker.*;
+package taskTrecker;
+
+import taskTrecker.Tasks.*;
 
 public class Main {
 
@@ -47,8 +49,10 @@ public class Main {
         System.out.println(manager);
 
 
-        Task updateTask2 = manager.getTask(2);
+        Task updateTask2 = manager.getTask(1);
         updateTask2.setStatus(StatusOfTask.DONE);
+        updateTask2.setId(22);
+        manager.updateTask(updateTask2);
 
         SubTask updateSub1 = manager.getSubTask(4);
         updateSub1.setStatus(StatusOfTask.DONE);

@@ -1,4 +1,7 @@
-package taskTrecker;
+package taskTrecker.history;
+
+import taskTrecker.Tasks.Task;
+import taskTrecker.history.HistoryManager;
 
 import java.util.ArrayList;
 import java.util.List;
