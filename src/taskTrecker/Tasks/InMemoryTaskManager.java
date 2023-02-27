@@ -1,6 +1,6 @@
 package taskTrecker.Tasks;
 
-import taskTrecker.*;
+import taskTrecker.Managers;
 import taskTrecker.history.HistoryManager;
 
 import java.util.ArrayList;
@@ -28,6 +28,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Map<Integer, Task> getTasks() {
         return tasks;
     }
+
 
     @Override
     public Map<Integer, SubTask> getSubTasks() {
@@ -103,10 +104,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         int keyOfTask = 0;
-        for(Integer key : tasks.keySet()){
+        for (Integer key : tasks.keySet()) {
             Task task1 = tasks.get(key);
-            if(task1 != null) {
-                if (task.equals(task1)){
+            if (task1 != null) {
+                if (task.equals(task1)) {
                     keyOfTask = key;
                 }
             }
@@ -163,6 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpicTask(int id) {
+
         if (!epicTasks.isEmpty()) {
             historyManager.add(epicTasks.get(id));
             return epicTasks.get(id);
@@ -196,11 +198,16 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeTask(int id) {
-        tasks.remove(id);
+        Task task = tasks.get(id);
+        if (task != null) {
+            historyManager.remove(task);
+            tasks.remove(id);
+        }
     }
 
     @Override
     public void removeSubTask(int id) {
+        historyManager.remove(subTasks.get(id));
         subTasks.remove(id);
         SubTask subTask = subTasks.get(id);
         updateEpicTask(subTask.getId());
@@ -218,8 +225,10 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         for (Integer key : keys) {
+            historyManager.remove(subTasks.get(key));
             subTasks.remove(key);
         }
+        historyManager.remove(epicTasks.get(id));
         epicTasks.remove(id);
 
 

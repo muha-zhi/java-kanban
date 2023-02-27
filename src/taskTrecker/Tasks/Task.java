@@ -61,24 +61,24 @@ public class Task {
     @Override
     public int hashCode() {
         int hash = 17;
-        // умножаем промежуточный результат на простое число
+
 
         if (name != null) {
-            // вычисляем хеш второго поля и добавляем его к общему результату
+
             hash = hash + name.hashCode();
         }
         hash = hash * 31;
         if (description != null) {
-            // вычисляем хеш первого поля и добавляем к нему начальное значение
+
             hash = hash + description.hashCode();
         }
         hash = hash * 31;
         if (status != null) {
-            // вычисляем хеш первого поля и добавляем к нему начальное значение
+
             hash = hash + status.hashCode();
         }
 
 
-        return hash; // возвращаем итоговый хеш
+        return hash;
     }
 }
