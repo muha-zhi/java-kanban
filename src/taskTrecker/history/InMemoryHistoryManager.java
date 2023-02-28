@@ -1,6 +1,6 @@
 package taskTrecker.history;
 
-import taskTrecker.Tasks.Task;
+import taskTrecker.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,12 +48,16 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        List<Task> tasks = new ArrayList<>();
-        Node<Task> taskNode = history.head;
 
-        while (taskNode != null) {
-            tasks.add(taskNode.data);
-            taskNode = taskNode.next;
+        List<Task> tasks = new ArrayList<>();
+
+        Node<Task> taskNode = history.head;
+        if (!history.isEmpty()) {
+
+            while (taskNode != null) {
+                tasks.add(taskNode.data);
+                taskNode = taskNode.next;
+            }
         }
         return tasks;
 
@@ -101,12 +105,13 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public void removeHead() {
             if (head.next == null) {
-                tail = null;
+                head = null;
             } else {
                 head.next.prev = null;
                 head = head.next;
             }
             size--;
+
         }
 
         public void removeTail() {
@@ -117,17 +122,24 @@ public class InMemoryHistoryManager implements HistoryManager {
                 tail = tail.prev;
             }
             size--;
+
+
         }
 
         public void removeNode(Node<T> node) {
-            if (node != null) {
+            if (node != null && !isEmpty()) {
                 if (node.equals(head)) {
                     removeHead();
                 } else if (node.equals(tail)) {
                     removeTail();
                 } else {
-                    node.next.prev = node.prev;
-                    node.prev.next = node.next;
+                    Node<T> next = node.next;
+                    Node<T> prev = node.prev;
+                    if (next != null && prev != null) {
+                        next.prev = node.prev;
+                        prev.next = node.next;
+                    }
+
                 }
 
             }

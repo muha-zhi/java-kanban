@@ -1,4 +1,4 @@
-package taskTrecker.Tasks;
+package taskTrecker.tasks;
 
 import taskTrecker.Managers;
 import taskTrecker.history.HistoryManager;
@@ -166,7 +166,10 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpicTask(int id) {
 
         if (!epicTasks.isEmpty()) {
-            historyManager.add(epicTasks.get(id));
+            Task epic = epicTasks.get(id);
+
+            historyManager.add(epic);
+
             return epicTasks.get(id);
         }
         return null;
@@ -238,7 +241,10 @@ public class InMemoryTaskManager implements TaskManager {
     @SuppressWarnings("rawtypes")
     public List getSubsOfEpic(int id) {
         Epic epic = epicTasks.get(id);
-        return epic.getSubTasks();
+        if (epic != null) {
+            return epic.getSubTasks();
+        }
+        return null;
     }
 
     @Override

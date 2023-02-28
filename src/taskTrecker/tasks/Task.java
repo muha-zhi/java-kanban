@@ -1,4 +1,4 @@
-package taskTrecker.Tasks;
+package taskTrecker.tasks;
 
 
 public class Task {
@@ -36,9 +36,7 @@ public class Task {
         this.description = description;
     }
 
-    public StatusOfTask isStatus() {
-        return status;
-    }
+
 
     public void setStatus(StatusOfTask status) {
         this.status = status;

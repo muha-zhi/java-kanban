@@ -15,7 +15,8 @@ public class Node<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        @SuppressWarnings("unchecked") Node<T> node = (Node<T>) o;
+        @SuppressWarnings("unchecked")
+        Node<T> node = (Node<T>) o;
         return data.equals(node.data) && next.equals(node.next) && prev.equals(node.prev);
     }
 

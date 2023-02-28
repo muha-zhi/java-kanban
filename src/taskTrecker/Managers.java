@@ -1,8 +1,8 @@
 package taskTrecker;
 
 
-import taskTrecker.Tasks.InMemoryTaskManager;
-import taskTrecker.Tasks.TaskManager;
+import taskTrecker.tasks.InMemoryTaskManager;
+import taskTrecker.tasks.TaskManager;
 import taskTrecker.history.HistoryManager;
 import taskTrecker.history.InMemoryHistoryManager;
 
