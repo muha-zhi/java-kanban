@@ -1,6 +1,5 @@
 package taskTrecker.tasks;
 
-import taskTrecker.Managers;
 import taskTrecker.history.HistoryManager;
 
 import java.util.ArrayList;
@@ -156,7 +155,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask getSubTask(int id) {
         if (!subTasks.isEmpty()) {
-            historyManager.add(subTasks.get(id));
+            if(historyManager != null) {
+                historyManager.add(subTasks.get(id));
+            }
             return subTasks.get(id);
         }
         return null;
@@ -167,8 +168,10 @@ public class InMemoryTaskManager implements TaskManager {
 
         if (!epicTasks.isEmpty()) {
             Task epic = epicTasks.get(id);
+if(historyManager!= null) {
 
-            historyManager.add(epic);
+    historyManager.add(epic);
+}
 
             return epicTasks.get(id);
         }

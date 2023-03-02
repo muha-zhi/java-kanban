@@ -1,15 +1,17 @@
 package taskTrecker;
 
 
-import taskTrecker.tasks.Epic;
-import taskTrecker.tasks.SubTask;
-import taskTrecker.tasks.TaskManager;
+import taskTrecker.history.HistoryManager;
+import taskTrecker.tasks.*;
+
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
         TaskManager manager = Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
 
         Epic epic1 = new Epic();
         epic1.setName("Переезд");
@@ -45,19 +47,26 @@ public class Main {
         manager.getSubTask(5);
         manager.getSubTask(4);
 
-        System.out.println(manager);
+
 
         manager.getEpicTask(1);
         manager.getSubTask(5);
         manager.getSubTask(4);
         manager.getSubTask(3);
 
+
+
+        manager.getSubTask(3);
+        manager.getSubTask(4);
+        manager.getSubTask(5);
+        manager.getEpicTask(1);
         System.out.println(manager);
 
-        manager.removeEpicTask(1);
-        manager.removeEpicTask(2);
+        List<Task> test = historyManager.getHistory();
+        for(Task task : test){
+            System.out.println(task);
 
-        System.out.println(manager);
+        }
 
 
     }

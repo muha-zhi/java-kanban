@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
+
     public CustomLinkedList<Task> history = new CustomLinkedList<>();
     public Map<Integer, Node<Task>> tasksToRemove = new HashMap<>();
 
