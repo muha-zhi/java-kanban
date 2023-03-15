@@ -1,13 +1,19 @@
 package taskTrecker.tasks;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import taskTrecker.history.HistoryManager;
 import taskTrecker.history.InMemoryHistoryManager;
 
 public class Managers {
-   static   TaskManager managerOfTask;
-   static HistoryManager historyManager;
+
+
+   private static   TaskManager managerOfTask;
+   private static HistoryManager historyManager;
     public static TaskManager getDefault() {
 
             if (managerOfTask == null) {
@@ -28,6 +34,9 @@ public class Managers {
         return historyManager;
 
     }
+
+
+
 
 
 }

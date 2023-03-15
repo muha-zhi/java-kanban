@@ -2,6 +2,7 @@ package taskTrecker.tasks;
 
 import taskTrecker.history.HistoryManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,9 +19,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, SubTask> subTasks = new HashMap<>();
-    private final Map<Integer, Epic> epicTasks = new HashMap<>();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, SubTask> subTasks = new HashMap<>();
+    protected final Map<Integer, Epic> epicTasks = new HashMap<>();
 
 
     @Override
@@ -40,26 +41,32 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void doTask(Task task) {
-        task.setId(getIdOfAll());
+    public void doTask(Task task) throws IOException {
+        if(task.getId() == 0) {
+            task.setId(getIdOfAll());
+        }
         tasks.put(task.getId(), task);
     }
 
     @Override
-    public void doEpicTask(Epic epic) {
-        epic.setId(getIdOfAll());
+    public void doEpicTask(Epic epic) throws IOException{
+        if(epic.getId() == 0) {
+            epic.setId(getIdOfAll());
+        }
         epicTasks.put(epic.getId(), epic);
     }
 
     @Override
-    public void doSubTask(SubTask sub) {
-        sub.setId(getIdOfAll());
+    public void doSubTask(SubTask sub) throws IOException{
+        if(sub.getId() == 0) {
+            sub.setId(getIdOfAll());
+        }
         for (Integer key : epicTasks.keySet()) {
-            if (epicTasks.get(key).equals(sub.getEpicObject())) {
-                sub.setEpicObject(epicTasks.get(key));
+            if (epicTasks.get(key).getId() == sub.getEpicObject()) {
+                sub.setEpicObject(epicTasks.get(key).getId());
                 updateEpicTask(sub.getId());
                 subTasks.put(sub.getId(), sub);
-                epicTasks.get(key).addSubTasks(sub);
+
             }
         }
 
@@ -67,8 +74,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public List getListOfEpic() {
+   
+    public List<Epic> getListOfEpic() {
         List<Epic> epics = new ArrayList<>();
         for (Integer key : epicTasks.keySet()) {
             epics.add(epicTasks.get(key));
@@ -78,8 +85,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public List getListOfTask() {
+    
+    public List<Task> getListOfTask() {
         List<Task> taskss = new ArrayList<>();
 
         for (Integer key : tasks.keySet()) {
@@ -90,8 +97,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public List getListOfSub() {
+    
+    public List<SubTask> getListOfSub() {
         List<SubTask> subTaskss = new ArrayList<>();
         for (Integer key : subTasks.keySet()) {
             subTaskss.add(subTasks.get(key));
@@ -101,7 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task task) {
+    public void updateTask(Task task) throws IOException{
         int keyOfTask = 0;
         for (Integer key : tasks.keySet()) {
             Task task1 = tasks.get(key);
@@ -117,14 +124,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateEpicTask(int id) {
+    public void updateEpicTask(int id) throws IOException{
         SubTask subTask = (subTasks.get(id));
         if (subTask != null) {
-            Epic epic = subTask.getEpicObject();
+            Epic epic = epicTasks.get(subTask.getEpicObject());
             StatusOfTask statusOfEpic;
             boolean doneTrue = false;
             boolean newTrue = false;
-            for (SubTask sub : epic.getSubTasks()) {
+            for (SubTask sub : getSubsOfEpic(epic.getId())) {
                 if (sub.status != null) {
                     if (sub.status == StatusOfTask.NEW) {
                         newTrue = true;
@@ -135,7 +142,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
             if (doneTrue && !newTrue) {
                 statusOfEpic = StatusOfTask.DONE;
-            } else if (!doneTrue && newTrue || epic.getSubTasks().isEmpty()) {
+            } else if (!doneTrue && newTrue || getSubsOfEpic(epic.getId()).isEmpty()) {
                 statusOfEpic = StatusOfTask.NEW;
             } else {
                 statusOfEpic = StatusOfTask.IN_PROGRESS;
@@ -146,17 +153,18 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubTask(SubTask subTask) {
+    public void updateSubTask(SubTask subTask) throws IOException{
 
         subTasks.put(subTask.getId(), subTask);
         updateEpicTask(subTask.getId());
     }
 
     @Override
-    public SubTask getSubTask(int id) {
+    public SubTask getSubTask(int id){
         if (!subTasks.isEmpty()) {
             if(historyManager != null) {
                 historyManager.add(subTasks.get(id));
+
             }
             return subTasks.get(id);
         }
@@ -164,7 +172,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicTask(int id) {
+    public int getEpicTask(int id) {
 
         if (!epicTasks.isEmpty()) {
             Task epic = epicTasks.get(id);
@@ -173,9 +181,9 @@ if(historyManager!= null) {
     historyManager.add(epic);
 }
 
-            return epicTasks.get(id);
+            return epicTasks.get(id).getId();
         }
-        return null;
+        return 0;
     }
 
     @Override
@@ -188,22 +196,22 @@ if(historyManager!= null) {
     }
 
     @Override
-    public void clearTasks() {
+    public void clearTasks() throws IOException {
         tasks.clear();
     }
 
     @Override
-    public void clearEpicTasks() {
+    public void clearEpicTasks()throws IOException {
         epicTasks.clear();
     }
 
     @Override
-    public void clearSubTasks() {
+    public void clearSubTasks()throws IOException {
         subTasks.clear();
     }
 
     @Override
-    public void removeTask(int id) {
+    public void removeTask(int id) throws IOException{
         Task task = tasks.get(id);
         if (task != null) {
             historyManager.remove(task);
@@ -212,7 +220,7 @@ if(historyManager!= null) {
     }
 
     @Override
-    public void removeSubTask(int id) {
+    public void removeSubTask(int id) throws IOException{
         historyManager.remove(subTasks.get(id));
         subTasks.remove(id);
         SubTask subTask = subTasks.get(id);
@@ -220,13 +228,13 @@ if(historyManager!= null) {
     }
 
     @Override
-    public void removeEpicTask(int id) {
+    public void removeEpicTask(int id) throws IOException{
 
         ArrayList<Integer> keys = new ArrayList<>();
 
         for (Integer key : subTasks.keySet()) {
             SubTask sub = subTasks.get(key);
-            if (sub.getEpicObject().equals(epicTasks.get(id))) {
+            if (sub.getEpicObject() == epicTasks.get(id).getId()) {
                 keys.add(key);
             }
         }
@@ -241,13 +249,17 @@ if(historyManager!= null) {
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public List getSubsOfEpic(int id) {
-        Epic epic = epicTasks.get(id);
-        if (epic != null) {
-            return epic.getSubTasks();
+    public List<SubTask> getSubsOfEpic(int id) {
+        List<SubTask> subs = new ArrayList<>();
+
+        for(Integer key : subTasks.keySet()){
+            SubTask sub = subTasks.get(key);
+            if(sub.getEpicObject() == id){
+                subs.add(sub);
+            }
         }
-        return null;
+        return subs;
+
     }
 
     @Override

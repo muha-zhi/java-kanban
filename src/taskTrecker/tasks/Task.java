@@ -5,7 +5,9 @@ public class Task {
     protected String name;
     protected String description;
     protected StatusOfTask status = StatusOfTask.NEW;
-    private int id;
+    private int id = 0;
+
+
 
     public StatusOfTask getStatus() {
         return status;

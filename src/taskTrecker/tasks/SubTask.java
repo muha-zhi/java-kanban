@@ -3,14 +3,14 @@ package taskTrecker.tasks;
 
 public class SubTask extends Task {
 
-    private Epic epicObject;
+    private  int epicObject;
 
 
-    public Epic getEpicObject() {
+    public int getEpicObject() {
         return epicObject;
     }
 
-    public void setEpicObject(Epic epicObject) {
+    public void setEpicObject(int epicObject) {
         this.epicObject = epicObject;
     }
 
@@ -20,7 +20,7 @@ public class SubTask extends Task {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SubTask subTask = (SubTask) o;
-        return epicObject.equals(subTask.epicObject);
+        return this.epicObject == epicObject;
     }
 
     @Override
@@ -34,8 +34,11 @@ public class SubTask extends Task {
     public int hashCode() {
         int hash = super.hashCode();
         hash *= 31;
-        hash += epicObject.hashCode();
+        hash += epicObject;
         return hash;
     }
+
+
+
 }
 
