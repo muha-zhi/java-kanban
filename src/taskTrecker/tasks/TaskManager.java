@@ -27,7 +27,7 @@ public interface TaskManager {
     public void doEpicTask(Epic epic) throws IOException;
 
 
-    public void doSubTask(SubTask sub)throws IOException;
+    public void doSubTask(SubTask sub) throws IOException;
 
 
     public List<Epic> getListOfEpic();
@@ -39,13 +39,13 @@ public interface TaskManager {
     public List<SubTask> getListOfSub();
 
 
-    public void updateTask(Task task)throws IOException;
+    public void updateTask(Task task) throws IOException;
 
 
-    public void updateEpicTask(int id)throws IOException;
+    public void updateEpicTask(int id) throws IOException;
 
 
-    public void updateSubTask(SubTask subTask)throws IOException;
+    public void updateSubTask(SubTask subTask) throws IOException;
 
 
     public SubTask getSubTask(int id);
@@ -56,20 +56,20 @@ public interface TaskManager {
     public Task getTask(int id);
 
 
-    public void clearTasks()throws IOException;
+    public void clearTasks() throws IOException;
 
-    public void clearEpicTasks()throws IOException;
-
-
-    public void clearSubTasks()throws IOException;
+    public void clearEpicTasks() throws IOException;
 
 
-    public void removeTask(int id)throws IOException;
-
-    public void removeSubTask(int id)throws IOException;
+    public void clearSubTasks() throws IOException;
 
 
-    public void removeEpicTask(int id)throws IOException;
+    public void removeTask(int id) throws IOException;
+
+    public void removeSubTask(int id) throws IOException;
+
+
+    public void removeEpicTask(int id) throws IOException;
 
 
     public List<SubTask> getSubsOfEpic(int id);

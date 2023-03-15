@@ -3,7 +3,7 @@ package taskTrecker.tasks;
 
 public class SubTask extends Task {
 
-    private  int epicObject;
+    private int epicObject;
 
 
     public int getEpicObject() {
@@ -20,7 +20,7 @@ public class SubTask extends Task {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SubTask subTask = (SubTask) o;
-        return this.epicObject == epicObject;
+        return epicObject == subTask.epicObject;
     }
 
     @Override
@@ -37,7 +37,6 @@ public class SubTask extends Task {
         hash += epicObject;
         return hash;
     }
-
 
 
 }

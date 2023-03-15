@@ -8,7 +8,6 @@ public class Task {
     private int id = 0;
 
 
-
     public StatusOfTask getStatus() {
         return status;
     }
@@ -39,7 +38,6 @@ public class Task {
     }
 
 
-
     public void setStatus(StatusOfTask status) {
         this.status = status;
     }
@@ -55,7 +53,7 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return  name.equals(task.name) && description.equals(task.description) && status.equals(task.status);
+        return name.equals(task.name) && description.equals(task.description) && status.equals(task.status);
     }
 
     @Override
