@@ -1,11 +1,25 @@
 package taskTrecker.tasks;
 
 
+import taskTrecker.tasks.Manager.Managers;
+
 public class Task {
+
     protected String name;
     protected String description;
     protected StatusOfTask status = StatusOfTask.NEW;
     private int id = 0;
+
+    public Task(int id) {
+        this.id = id;
+
+    }
+
+    public Task() {
+
+        this.id = Managers.getDefault().getIdOfAll();
+
+    }
 
 
     public StatusOfTask getStatus() {
@@ -14,10 +28,6 @@ public class Task {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
 

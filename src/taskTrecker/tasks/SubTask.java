@@ -2,6 +2,15 @@ package taskTrecker.tasks;
 
 
 public class SubTask extends Task {
+    public SubTask(int id) {
+        super(id);
+
+    }
+
+    public SubTask() {
+        super();
+
+    }
 
     private int epicObject;
 

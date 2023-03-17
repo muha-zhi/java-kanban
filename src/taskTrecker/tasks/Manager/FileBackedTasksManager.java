@@ -1,12 +1,12 @@
-package taskTrecker.tasks;
+package taskTrecker.tasks.Manager;
 
 import taskTrecker.history.HistoryManager;
+import taskTrecker.tasks.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -27,23 +27,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public void save() throws ManagerSaveException {
 
-        try (FileWriter writer = new FileWriter("res.csv", false )) {
-            if(!epicTasks.isEmpty()) {
-                for (Integer n : epicTasks.keySet()){
+        try (FileWriter writer = new FileWriter(file, false)) {
+            if (!epicTasks.isEmpty()) {
+                for (Integer n : epicTasks.keySet()) {
                     String task = taskToString(epicTasks.get(n));
                     writer.append(task);
                     writer.write("\n");
                 }
             }
-            if(!tasks.isEmpty()) {
-                for (Integer n : tasks.keySet()){
+            if (!tasks.isEmpty()) {
+                for (Integer n : tasks.keySet()) {
                     String task = taskToString(tasks.get(n));
                     writer.append(task);
                     writer.write("\n");
                 }
             }
-            if(!subTasks.isEmpty()) {
-                for (Integer n : subTasks.keySet()){
+            if (!subTasks.isEmpty()) {
+                for (Integer n : subTasks.keySet()) {
                     String task = taskToString(subTasks.get(n));
                     writer.append(task);
                     writer.write("\n");
@@ -79,35 +79,35 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public static String historyToString(HistoryManager manager) {
 
-      List<Task> history =  manager.getHistory();
-      String[] idOfHistory = new String[history.size()];
+        List<Task> history = manager.getHistory();
+        String[] idOfHistory = new String[history.size()];
 
-      int val = 0;
+        int val = 0;
 
-      for(Task t: history){
+        for (Task t : history) {
 
-          idOfHistory[val] = Integer.toString(t.getId());
-          val++;
-      }
-      return String.join(",", idOfHistory);
+            idOfHistory[val] = Integer.toString(t.getId());
+            val++;
+        }
+        return String.join(",", idOfHistory);
     }
 
     public static Task fromString(String value) {
-        Task taskForReturn = new Task();
+
         String[] taskElements = value.split(",");
+
         TypeOfTask type = TypeOfTask.valueOf(taskElements[1]);
-        switch (type){
+        Task taskForReturn = new Task(Integer.parseInt(taskElements[0]));
+        switch (type) {
             case EPIC:
-                taskForReturn = new Epic();
-                taskForReturn.setId(Integer.parseInt(taskElements[0]));
+                taskForReturn = new Epic(Integer.parseInt(taskElements[0]));
                 taskForReturn.setName(taskElements[2]);
                 taskForReturn.setDescription(taskElements[3]);
                 taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
                 break;
 
             case SUBTASK:
-                taskForReturn = new SubTask();
-                taskForReturn.setId(Integer.parseInt(taskElements[0]));
+                taskForReturn = new SubTask(Integer.parseInt(taskElements[0]));
                 taskForReturn.setName(taskElements[2]);
                 taskForReturn.setDescription(taskElements[3]);
                 taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
@@ -116,11 +116,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
             case TASK:
 
-                taskForReturn.setId(Integer.parseInt(taskElements[0]));
+
                 taskForReturn.setName(taskElements[2]);
                 taskForReturn.setDescription(taskElements[3]);
                 taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
-               break;
+                break;
 
             default:
                 break;
@@ -138,15 +138,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String typeOfTask = "TASK";
 
         String forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status;
-         if(task.getClass() == Epic.class){
-             typeOfTask = "EPIC";
-              forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status;
-         } else if(task.getClass() == SubTask.class){
-             typeOfTask = "SUBTASK";
-             idOfEpicForSub = Integer.toString(((SubTask) task).getEpicObject());
-             forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status + "," + idOfEpicForSub;
-         }
-           return forReturn;
+        if (task.getClass() == Epic.class) {
+            typeOfTask = "EPIC";
+            forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status;
+        } else if (task.getClass() == SubTask.class) {
+            typeOfTask = "SUBTASK";
+            idOfEpicForSub = Integer.toString(((SubTask) task).getEpicObject());
+            forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status + "," + idOfEpicForSub;
+        }
+        return forReturn;
     }
 
     @Override
@@ -228,39 +228,36 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
 
     }
+
     @Override
-    public SubTask getSubTask(int id){
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+    public SubTask getSubTask(int id) throws ManagerSaveException {
+
+        save();
+
         return super.getSubTask(id);
 
     }
 
     @Override
-    public int getEpicTask(int id) {
+    public int getEpicTask(int id) throws ManagerSaveException {
 
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+
+        save();
+
         return super.getEpicTask(id);
+
     }
 
     @Override
-    public Task getTask(int id) {
-        try {
-            save();
-        } catch (ManagerSaveException e) {
-            throw new RuntimeException(e);
-        }
+    public Task getTask(int id) throws ManagerSaveException {
+
+        save();
+
         return super.getTask(id);
     }
 
     public static FileBackedTasksManager loadFromFile(File file) throws IOException {
+
         FileBackedTasksManager manager = new FileBackedTasksManager(file);
 
         int indexOfHistory = 0;
@@ -268,7 +265,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
         for (int i = 0; i < taskLines.size(); i++) {
             if (taskLines.get(i).equals("")) {
-                if(!((i + 2) > taskLines.size())) {
+                if (!((i + 2) > taskLines.size())) {
                     indexOfHistory = i + 1;
                     break;
                 }
@@ -293,69 +290,69 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         break;
                 }
 
+
             }
 
 
         }
-            if(indexOfHistory != 0){
-        List<Integer> historyIdOfTasks = historyFromString(taskLines.get(indexOfHistory));
-        for (Integer i : historyIdOfTasks) {
-            if (manager.tasks.containsKey(i)) {
-                manager.historyManager.add(manager.tasks.get(i));
-            } else if (manager.epicTasks.containsKey(i)) {
-                manager.historyManager.add(manager.epicTasks.get(i));
-            } else if (manager.subTasks.containsKey(i)) {
-                manager.historyManager.add(manager.subTasks.get(i));
+        if (indexOfHistory != 0) {
+            List<Integer> historyIdOfTasks = historyFromString(taskLines.get(indexOfHistory));
+            for (Integer i : historyIdOfTasks) {
+                if (manager.tasks.containsKey(i)) {
+                    manager.historyManager.add(manager.tasks.get(i));
+                } else if (manager.epicTasks.containsKey(i)) {
+                    manager.historyManager.add(manager.epicTasks.get(i));
+                } else if (manager.subTasks.containsKey(i)) {
+                    manager.historyManager.add(manager.subTasks.get(i));
+                }
             }
         }
+
+
+        for (Epic epic : manager.getListOfEpic()) {
+            List<SubTask> subs = new ArrayList<>();
+            for (SubTask sub : manager.getListOfSub()) {
+                if (sub.getEpicObject() == epic.getId()) {
+                    subs.add(sub);
+                }
+            }
+            epic.setSubsOfThisEpic(subs);
+        }
+        return manager;
     }
 
-
-           return manager;
-
-    }
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
 
 
 
+        FileBackedTasksManager fileBackedTasksManager1 = new FileBackedTasksManager(new File("C:\\Users\\mzile\\dev\\java-kanban\\src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
 
-       FileBackedTasksManager fileBackedTasksManager
-               = new FileBackedTasksManager(new File("res.csv"));
-       Task task1 = new Task();
-        task1.setName("ttttt");
-        task1.setDescription("rhgeoiahregpiherpoig");
-       fileBackedTasksManager.doTask(task1);
-        Task task3 = new Task();
-        task3.setName("rrrrrrr");
-        task3.setDescription("gjfdcrtcvdtr");
-        fileBackedTasksManager.doTask(task3);
-        Task task4 = new Task();
-        task4.setName("hhhhhhhhh");
-        task4.setDescription("rhgu y fgiyut fiytf");
-        fileBackedTasksManager.doTask(task4);
-        Epic epic1 = new Epic();
-        epic1.setName("retwretwet");
-        epic1.setDescription("trtrtrewtretwret");
-        fileBackedTasksManager.doEpicTask(epic1);
-        SubTask subTask = new SubTask();
-        subTask.setEpicObject(epic1.getId());
-        subTask.setName("gggggggg");
-        subTask.setDescription("ertwretwret");
-        fileBackedTasksManager.doSubTask(subTask);
-        System.out.println(fileBackedTasksManager);
-        FileBackedTasksManager fileBackedTasksManager1 = FileBackedTasksManager.loadFromFile(new File("res.csv"));
+        Task task = new Task();
+        task.setName("ighogui");
+        task.setDescription("gugvouhgou");
+        fileBackedTasksManager1.doTask(task);
+        Task task2 = new Task();
+        task2.setName("oooooooooo");
+        task2.setDescription("gugvouhgou");
+        fileBackedTasksManager1.doTask(task2);
+        fileBackedTasksManager1.getTask(1);
+        fileBackedTasksManager1.getTask(2);
+
+
         System.out.println(fileBackedTasksManager1);
-
-
+        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
+        System.out.println(fileBackedTasksManager);
 
     }
+
     @Override
-    public String toString(){
+    public String toString() {
         return super.toString();
     }
+
     static List<String> readFileContents(String path) {
         try {
-            return Files.readAllLines(Path.of(path), StandardCharsets.UTF_8);
+            return Files.readAllLines(Path.of(path));
         } catch (IOException e) {
             System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории.");
             return Collections.emptyList();

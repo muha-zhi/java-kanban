@@ -1,5 +1,9 @@
-package taskTrecker.tasks;
+package taskTrecker.tasks.Manager;
 
+
+import taskTrecker.tasks.Epic;
+import taskTrecker.tasks.SubTask;
+import taskTrecker.tasks.Task;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,12 +52,12 @@ public interface TaskManager {
     public void updateSubTask(SubTask subTask) throws IOException;
 
 
-    public SubTask getSubTask(int id);
+    public SubTask getSubTask(int id) throws ManagerSaveException;
 
 
-    public int getEpicTask(int id);
+    public int getEpicTask(int id) throws ManagerSaveException;
 
-    public Task getTask(int id);
+    public Task getTask(int id) throws ManagerSaveException;
 
 
     public void clearTasks() throws IOException;

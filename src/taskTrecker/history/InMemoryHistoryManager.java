@@ -9,8 +9,10 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    public CustomLinkedList<Task> history = new CustomLinkedList<>();
-    public Map<Integer, Node<Task>> tasksToRemove = new HashMap<>();
+    private final CustomLinkedList<Task> history = new CustomLinkedList<>();
+    private final Map<Integer, Node<Task>> tasksToRemove = new HashMap<>();
+
+
 
     @Override
     public void remove(Task task) {
