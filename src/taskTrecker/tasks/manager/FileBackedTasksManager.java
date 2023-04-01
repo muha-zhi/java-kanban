@@ -1,4 +1,4 @@
-package taskTrecker.tasks.Manager;
+package taskTrecker.tasks.manager;
 
 import taskTrecker.history.HistoryManager;
 import taskTrecker.tasks.*;
@@ -9,6 +9,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +25,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public FileBackedTasksManager(File file) {
         super();
         this.file = file;
+    }
+
+    public FileBackedTasksManager() {
+        super();
+
     }
 
 
@@ -93,33 +101,37 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static Task fromString(String value) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy| HH:mm");
 
         String[] taskElements = value.split(",");
 
         TypeOfTask type = TypeOfTask.valueOf(taskElements[1]);
-        Task taskForReturn = new Task(Integer.parseInt(taskElements[0]));
+        Task taskForReturn = new Task(taskElements[2],
+                taskElements[3],
+                StatusOfTask.valueOf(taskElements[4]),
+                LocalDateTime.parse(taskElements[5], formatter),
+                Duration.ofMinutes(Long.parseLong(taskElements[6])),
+                Integer.parseInt(taskElements[0]));
+
+
         switch (type) {
+
             case EPIC:
-                taskForReturn = new Epic(Integer.parseInt(taskElements[0]));
-                taskForReturn.setName(taskElements[2]);
-                taskForReturn.setDescription(taskElements[3]);
-                taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
+                taskForReturn = new Epic(taskElements[2],
+                        taskElements[3],
+                        StatusOfTask.valueOf(taskElements[4]),
+                        LocalDateTime.parse(taskElements[5], formatter),
+                        Duration.ofMinutes(Long.parseLong(taskElements[6])),
+                        Integer.parseInt(taskElements[0]));
                 break;
 
             case SUBTASK:
-                taskForReturn = new SubTask(Integer.parseInt(taskElements[0]));
-                taskForReturn.setName(taskElements[2]);
-                taskForReturn.setDescription(taskElements[3]);
-                taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
-                ((SubTask) taskForReturn).setEpicObject(Integer.parseInt(taskElements[5]));
-                break;
-
-            case TASK:
-
-
-                taskForReturn.setName(taskElements[2]);
-                taskForReturn.setDescription(taskElements[3]);
-                taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
+                taskForReturn = new SubTask(taskElements[2],
+                        taskElements[3],
+                        StatusOfTask.valueOf(taskElements[4]),
+                        LocalDateTime.parse(taskElements[5], formatter),
+                        Duration.ofMinutes(Long.parseLong(taskElements[6])),
+                        Integer.parseInt(taskElements[7]), Integer.parseInt(taskElements[0]));
                 break;
 
             default:
@@ -130,21 +142,36 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
 
     public static String taskToString(Task task) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy| HH:mm");
         String id = Integer.toString(task.getId());
         String name = task.getName();
         String dis = task.getDescription();
         String status = task.getStatus().name();
         String idOfEpicForSub;
+        LocalDateTime startTime = task.getStartTime();
+        Duration duration = task.getDuration();
         String typeOfTask = "TASK";
 
         String forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status;
+        if (startTime != null) {
+            forReturn += "," + startTime.format(formatter)
+                    + "," + duration.toMinutes();
+        }
         if (task.getClass() == Epic.class) {
             typeOfTask = "EPIC";
             forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status;
+            if (startTime != null) {
+                forReturn += "," + startTime.format(formatter)
+                        + "," + duration.toMinutes();
+            }
         } else if (task.getClass() == SubTask.class) {
             typeOfTask = "SUBTASK";
             idOfEpicForSub = Integer.toString(((SubTask) task).getEpicObject());
-            forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status + "," + idOfEpicForSub;
+            forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status;
+            if (startTime != null) {
+                forReturn += "," + startTime.format(formatter)
+                        + "," + duration.toMinutes() + "," + idOfEpicForSub;
+            }
         }
         return forReturn;
     }
@@ -177,8 +204,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateEpicTask(int id) throws IOException {
-        super.updateEpicTask(id);
+    public void updateEpicTask(Epic epic) throws IOException {
+        super.updateEpicTask(epic);
         save();
     }
 
@@ -239,14 +266,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int getEpicTask(int id) throws ManagerSaveException {
-
-
+    public Epic getEpicTask(int id) throws ManagerSaveException {
         save();
-
         return super.getEpicTask(id);
 
     }
+
 
     @Override
     public Task getTask(int id) throws ManagerSaveException {
@@ -261,7 +286,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager manager = new FileBackedTasksManager(file);
 
         int indexOfHistory = 0;
-        List<String> taskLines = readFileContents(file.getName());
+        List<String> taskLines = readFileContents(file);
 
         for (int i = 0; i < taskLines.size(); i++) {
             if (taskLines.get(i).equals("")) {
@@ -320,41 +345,42 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
         return manager;
     }
+/*
+   public static void main(String[] args) throws IOException {
 
-    public static void main(String[] args) throws IOException {
 
+        FileBackedTasksManager fileBackedTasksManager1 = new FileBackedTasksManager(new File("C:\\Users" +
+                "\\mzile\\dev\\java-kanban\\src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
 
+        Task task = new Task("nnnn", "ggggg");
 
-        FileBackedTasksManager fileBackedTasksManager1 = new FileBackedTasksManager(new File("C:\\Users\\mzile\\dev\\java-kanban\\src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
-
-        Task task = new Task();
-        task.setName("ighogui");
-        task.setDescription("gugvouhgou");
         fileBackedTasksManager1.doTask(task);
-        Task task2 = new Task();
-        task2.setName("oooooooooo");
-        task2.setDescription("gugvouhgou");
+        Task task2 = new Task("nnnnn","jvkjgugu");
+
         fileBackedTasksManager1.doTask(task2);
         fileBackedTasksManager1.getTask(1);
         fileBackedTasksManager1.getTask(2);
 
 
         System.out.println(fileBackedTasksManager1);
-        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
+        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("src" +
+                "\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
         System.out.println(fileBackedTasksManager);
 
     }
+
+ */
 
     @Override
     public String toString() {
         return super.toString();
     }
 
-    static List<String> readFileContents(String path) {
+    static List<String> readFileContents(File path) {
         try {
-            return Files.readAllLines(Path.of(path));
+            return Files.readAllLines(Path.of(String.valueOf(path.toPath())));
         } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с месячным отчётом. Возможно файл не находится в нужной директории.");
+            System.out.println("Невозможно прочитать файл");
             return Collections.emptyList();
         }
     }

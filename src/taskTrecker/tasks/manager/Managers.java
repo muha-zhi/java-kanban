@@ -1,4 +1,4 @@
-package taskTrecker.tasks.Manager;
+package taskTrecker.tasks.manager;
 
 
 import taskTrecker.history.HistoryManager;

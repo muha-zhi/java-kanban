@@ -1,24 +1,81 @@
 package taskTrecker.tasks;
 
 
-import taskTrecker.tasks.Manager.Managers;
+import taskTrecker.tasks.manager.Managers;
 
-public class Task {
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+public class Task  {
 
     protected String name;
     protected String description;
     protected StatusOfTask status = StatusOfTask.NEW;
+
+    protected LocalDateTime startTime;
+    protected Duration duration;
+
+
     private int id = 0;
 
-    public Task(int id) {
+
+    public Task(String name, String description, StatusOfTask status, LocalDateTime startTime, Duration duration, int id) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.startTime = startTime;
+        this.duration = duration;
         this.id = id;
+    }
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+        this.id = Managers.getDefault().getIdOfAll();
+    }
+
+    public Task(String name, String description, LocalDateTime startTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.id = Managers.getDefault().getIdOfAll();
+    }
+
+
+    public Task(String name, String description, int id) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+    }
+
+
+
+
+    public LocalDateTime getEndTime(){
+        LocalDateTime time = null;
+        if(startTime != null && duration != null) {
+            time = startTime.plusMinutes(duration.toMinutes());
+        }
+       return time;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+
+            return startTime;
+
 
     }
 
-    public Task() {
-
-        this.id = Managers.getDefault().getIdOfAll();
-
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
 
@@ -58,12 +115,14 @@ public class Task {
                 + ", id=" + id + '}' + " ";
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return name.equals(task.name) && description.equals(task.description) && status.equals(task.status);
+        return id == task.getId();
     }
 
     @Override
