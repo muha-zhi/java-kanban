@@ -1,7 +1,9 @@
-package taskTrecker.history;
+package tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import taskTrecker.history.HistoryManager;
+import taskTrecker.history.InMemoryHistoryManager;
 import taskTrecker.tasks.Task;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package taskTrecker.tasks.manager;
+package tests;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import taskTrecker.tasks.Epic;
 import taskTrecker.tasks.SubTask;
 import taskTrecker.tasks.Task;
+import taskTrecker.tasks.manager.FileBackedTasksManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,14 +20,18 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
     FileBackedTasksManager fileBackedTasksManager;
 
     public FileBackedTasksManagerTest() {
-        super(new FileBackedTasksManager(new File("C:/Users" +
-                "/mzile/dev/java-kanban/src/taskTrecker/resources/res.csv")));
+        super(new FileBackedTasksManager(new File("src" +
+                "\\taskTrecker\\resources\\res.csv").getAbsoluteFile()));
+    }
+
+    public File getRes() {
+        return new File("src" +
+                "\\taskTrecker\\resources\\res.csv").getAbsoluteFile();
     }
 
     @BeforeEach
     public void beforeEach() {
-        fileBackedTasksManager = new FileBackedTasksManager(new File("C:/Users" +
-                "/mzile/dev/java-kanban/src/taskTrecker/resources/res.csv"));
+        fileBackedTasksManager = new FileBackedTasksManager(getRes());
 
 
     }
@@ -47,8 +52,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
 
 
         fileBackedTasksManager.save();
-        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(new File("C:/Users" +
-                "/mzile/dev/java-kanban/src/taskTrecker/resources/res.csv"));
+        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(getRes());
         assertEquals(0, manager.getListOfTask().size());
 
     }
@@ -60,8 +64,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
         fileBackedTasksManager.doEpicTask(epic);
         assertEquals(1, fileBackedTasksManager.getListOfEpic().size());
         assertEquals(0, fileBackedTasksManager.getEpicTask(epic.getId()).getSubsOfThisEpic().size());
-        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(new File("C:/Users" +
-                "/mzile/dev/java-kanban/src/taskTrecker/resources/res.csv"));
+        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(getRes());
         assertEquals(1, manager.getListOfEpic().size());
         assertEquals(0, manager.getEpicTask(epic.getId()).getSubsOfThisEpic().size());
 
@@ -75,11 +78,11 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
         fileBackedTasksManager.doEpicTask(new Epic("name2", "dis2", LocalDateTime.of(2023, 1
                 , 1, 13, 0), Duration.ofMinutes(10)));
 
+
         assertEquals(2, fileBackedTasksManager.getListOfEpic().size());
         assertEquals(0, fileBackedTasksManager.historyManager.getHistory().size());
 
-        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(new File("C:/Users" +
-                "/mzile/dev/java-kanban/src/taskTrecker/resources/res.csv"));
+        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(getRes());
 
         assertEquals(2, manager.getListOfEpic().size());
         assertEquals(0, manager.historyManager.getHistory().size());
@@ -110,8 +113,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
         assertEquals(epic.getId(), subTask.getEpicObject());
         assertEquals(subTask, epic.getSubsOfThisEpic().get(0));
 
-        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(new File("C:/Users" +
-                "/mzile/dev/java-kanban/src/taskTrecker/resources/res.csv"));
+        FileBackedTasksManager manager = FileBackedTasksManager.loadFromFile(getRes());
 
 
         assertEquals(2, manager.historyManager.getHistory().size());

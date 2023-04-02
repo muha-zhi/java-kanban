@@ -1,10 +1,11 @@
-package taskTrecker.tasks.manager;
+package tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import taskTrecker.tasks.Epic;
 import taskTrecker.tasks.SubTask;
 import taskTrecker.tasks.Task;
+import taskTrecker.tasks.manager.TaskManager;
 
 import java.io.IOException;
 import java.time.Duration;

@@ -106,32 +106,43 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String[] taskElements = value.split(",");
 
         TypeOfTask type = TypeOfTask.valueOf(taskElements[1]);
-        Task taskForReturn = new Task(taskElements[2],
-                taskElements[3],
-                StatusOfTask.valueOf(taskElements[4]),
-                LocalDateTime.parse(taskElements[5], formatter),
-                Duration.ofMinutes(Long.parseLong(taskElements[6])),
-                Integer.parseInt(taskElements[0]));
+        Task taskForReturn = null;
 
 
         switch (type) {
 
+            case TASK:
+                taskForReturn = new Task(Integer.parseInt(taskElements[0]));
+                taskForReturn.setName(taskElements[2]);
+                taskForReturn.setDescription(taskElements[3]);
+                taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
+                if (taskElements.length > 5) {
+                    taskForReturn.setStartTime(LocalDateTime.parse(taskElements[5], formatter));
+                    taskForReturn.setDuration(Duration.ofMinutes(Long.parseLong(taskElements[6])));
+                }
+
             case EPIC:
-                taskForReturn = new Epic(taskElements[2],
-                        taskElements[3],
-                        StatusOfTask.valueOf(taskElements[4]),
-                        LocalDateTime.parse(taskElements[5], formatter),
-                        Duration.ofMinutes(Long.parseLong(taskElements[6])),
-                        Integer.parseInt(taskElements[0]));
+                taskForReturn = new Epic(Integer.parseInt(taskElements[0]));
+                taskForReturn.setName(taskElements[2]);
+                taskForReturn.setDescription(taskElements[3]);
+                taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
+                if (taskElements.length > 5) {
+                    taskForReturn.setStartTime(LocalDateTime.parse(taskElements[5], formatter));
+                    taskForReturn.setDuration(Duration.ofMinutes(Long.parseLong(taskElements[6])));
+                }
                 break;
 
             case SUBTASK:
-                taskForReturn = new SubTask(taskElements[2],
-                        taskElements[3],
-                        StatusOfTask.valueOf(taskElements[4]),
-                        LocalDateTime.parse(taskElements[5], formatter),
-                        Duration.ofMinutes(Long.parseLong(taskElements[6])),
-                        Integer.parseInt(taskElements[7]), Integer.parseInt(taskElements[0]));
+
+                taskForReturn = new SubTask(Integer.parseInt(taskElements[0]));
+                taskForReturn.setName(taskElements[2]);
+                taskForReturn.setDescription(taskElements[3]);
+                taskForReturn.setStatus(StatusOfTask.valueOf(taskElements[4]));
+                ((SubTask) taskForReturn).setEpicObject(Integer.parseInt(taskElements[5]));
+                if (taskElements.length > 6) {
+                    taskForReturn.setStartTime(LocalDateTime.parse(taskElements[6], formatter));
+                    taskForReturn.setDuration(Duration.ofMinutes(Long.parseLong(taskElements[7])));
+                }
                 break;
 
             default:
@@ -167,10 +178,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         } else if (task.getClass() == SubTask.class) {
             typeOfTask = "SUBTASK";
             idOfEpicForSub = Integer.toString(((SubTask) task).getEpicObject());
-            forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status;
+            forReturn = id + "," + typeOfTask + "," + name + "," + dis + "," + status + "," + idOfEpicForSub;
             if (startTime != null) {
                 forReturn += "," + startTime.format(formatter)
-                        + "," + duration.toMinutes() + "," + idOfEpicForSub;
+                        + "," + duration.toMinutes();
             }
         }
         return forReturn;

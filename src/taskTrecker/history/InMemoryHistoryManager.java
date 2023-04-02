@@ -16,9 +16,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void clearHistory() {
         List<Task> tasks = new ArrayList<>();
         for (Integer k : tasksToRemove.keySet()) {
-           tasks.add(tasksToRemove.get(k).data);
+            tasks.add(tasksToRemove.get(k).data);
         }
-        for(Task t : tasks){
+        for (Task t : tasks) {
             remove(t);
         }
     }

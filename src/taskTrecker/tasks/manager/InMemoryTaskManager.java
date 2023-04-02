@@ -33,13 +33,17 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public boolean isIntersects(Task task) {
         boolean forReturn = false;
+
+
         for (Task t : sortedTasks) {
-            if (task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())
-                    || task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime())
-                    || task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())) {
-                forReturn = true;
-            }
+            if (task.getStartTime() != null && task.getEndTime() != null && t.getStartTime() != null && t.getEndTime() != null)
+                if (task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())
+                        || task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime())
+                        || task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())) {
+                    forReturn = true;
+                }
         }
+
         return forReturn;
     }
 

@@ -1,8 +1,6 @@
 package taskTrecker.tasks;
 
 
-import taskTrecker.tasks.manager.Managers;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -17,7 +15,12 @@ public class SubTask extends Task {
     }
 
     public SubTask(String name, String description) {
-       super(name, description);
+        super(name, description);
+    }
+
+    public SubTask(int id) {
+
+        super(id);
     }
 
     public SubTask(String name, String description, LocalDateTime startTime, Duration duration, int epicObject) {
@@ -25,6 +28,7 @@ public class SubTask extends Task {
         this.epicObject = epicObject;
 
     }
+
     public SubTask(String name, String description, int id) {
         super(name, description, id);
     }

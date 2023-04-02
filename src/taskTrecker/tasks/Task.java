@@ -33,6 +33,11 @@ public class Task  {
         this.id = Managers.getDefault().getIdOfAll();
     }
 
+    public Task(int id) {
+
+        this.id = id;
+    }
+
     public Task(String name, String description, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.description = description;

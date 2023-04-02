@@ -1,16 +1,15 @@
 package taskTrecker.tasks;
 
-import taskTrecker.tasks.manager.Managers;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class Epic extends Task {
 
     private List<SubTask> subsOfThisEpic = new ArrayList<>();
+
+    private Set<SubTask> sortedSubsOfThisEpic = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     private LocalDateTime endTime;
 
@@ -26,9 +25,16 @@ public class Epic extends Task {
         setEndTime();
 
     }
+
+    public Epic(int id) {
+
+        super(id);
+    }
+
     public Epic(String name, String description, int id) {
         super(name, description, id);
     }
+
     public Epic(String name, String description, LocalDateTime startTime, Duration duration) {
 
         super(name, description, startTime, duration);
@@ -37,20 +43,42 @@ public class Epic extends Task {
 
     }
 
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
 
 
     public void setStartTime() {
+        LocalDateTime startTimeR = null;
         if (subsOfThisEpic.size() != 0) {
-            startTime = subsOfThisEpic.get(subsOfThisEpic.size() - 1).getStartTime();
+            startTimeR = subsOfThisEpic.get(0).getStartTime();
+
+            for (SubTask s : sortedSubsOfThisEpic) {
+                if (s.getStartTime().isBefore(startTimeR)) {
+                    startTime = s.getStartTime();
+                }
+            }
         }
+        startTime = startTimeR;
 
     }
 
     public void setEndTime() {
+
+        LocalDateTime endTimeR = null;
         if (subsOfThisEpic.size() != 0) {
 
-            endTime = subsOfThisEpic.get(0).getEndTime();
+            endTimeR = subsOfThisEpic.get(0).getEndTime();
+
+            if (subsOfThisEpic.size() != 0) {
+                for (SubTask s : sortedSubsOfThisEpic) {
+                    if (s.getEndTime().isAfter(endTimeR)) {
+                        endTimeR = s.getEndTime();
+                    }
+                }
+            }
         }
+        endTime = endTimeR;
     }
 
     public List<SubTask> getSubsOfThisEpic() {
@@ -58,7 +86,9 @@ public class Epic extends Task {
     }
 
     public void addSubForEpic(SubTask s) {
+
         subsOfThisEpic.add(s);
+        sortedSubsOfThisEpic.add(s);
     }
 
     public void setSubsOfThisEpic(List<SubTask> subsOfThisEpic) {
