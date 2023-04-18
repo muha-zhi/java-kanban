@@ -1,6 +1,8 @@
 package taskTrecker.tasks.manager;
 
+import com.google.gson.annotations.Expose;
 import taskTrecker.history.HistoryManager;
+import taskTrecker.history.InMemoryHistoryManager;
 import taskTrecker.tasks.Epic;
 import taskTrecker.tasks.StatusOfTask;
 import taskTrecker.tasks.SubTask;
@@ -10,9 +12,22 @@ import java.io.IOException;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int idOfAll = 0;
-    public HistoryManager historyManager = Managers.getDefaultHistory();
+    @Expose
+    protected int idOfAll = 0;
+    @Expose
+    public InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
 
+
+    @Expose
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    @Expose
+    protected Map<Integer, SubTask> subTasks = new HashMap<>();
+    @Expose
+    protected Map<Integer, Epic> epicTasks = new HashMap<>();
+    @Expose
+    protected Set<Task> sortedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+    @Expose
+    protected List<Task> taskWithoutDate = new ArrayList<>();
 
     public int getIdOfAll() {
         idOfAll += 1;
@@ -24,11 +39,54 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
-    protected final Map<Integer, Task> tasks = new HashMap<>();
-    protected final Map<Integer, SubTask> subTasks = new HashMap<>();
-    protected final Map<Integer, Epic> epicTasks = new HashMap<>();
-    protected Set<Task> sortedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
-    protected List<Task> taskWithoutDate = new ArrayList<>();
+    public void setTasks(Map<Integer, Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void setSubTasks(Map<Integer, SubTask> subTasks) {
+        this.subTasks = subTasks;
+    }
+
+    public void setEpicTasks(Map<Integer, Epic> epicTasks) {
+        this.epicTasks = epicTasks;
+    }
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+
+    public void setHistoryManager(InMemoryHistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
+
+    public Map<Integer, Task> getTasks() {
+        return tasks;
+    }
+
+    public Map<Integer, SubTask> getSubTasks() {
+        return subTasks;
+    }
+
+    public Map<Integer, Epic> getEpicTasks() {
+        return epicTasks;
+    }
+
+    public Set<Task> getSortedTasks() {
+        return sortedTasks;
+    }
+
+    public void setSortedTasks(Set<Task> sortedTasks) {
+        this.sortedTasks = sortedTasks;
+    }
+
+    public List<Task> getTaskWithoutDate() {
+        return taskWithoutDate;
+    }
+
+    public void setTaskWithoutDate(List<Task> taskWithoutDate) {
+        this.taskWithoutDate = taskWithoutDate;
+    }
 
     @Override
     public boolean isIntersects(Task task) {
@@ -36,11 +94,13 @@ public class InMemoryTaskManager implements TaskManager {
 
 
         for (Task t : sortedTasks) {
-            if (task.getStartTime() != null && task.getEndTime() != null && t.getStartTime() != null && t.getEndTime() != null)
-                if (task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())
-                        || task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime())
-                        || task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())) {
-                    forReturn = true;
+            if (task != null && t != null)
+                if (task.getStartTime() != null && task.getEndTime() != null && t.getStartTime() != null && t.getEndTime() != null) {
+                    if (task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())
+                            || task.getEndTime().isAfter(t.getStartTime()) && task.getEndTime().isBefore(t.getEndTime())
+                            || task.getStartTime().isBefore(t.getStartTime()) && task.getEndTime().isAfter(t.getEndTime())) {
+                        forReturn = true;
+                    }
                 }
         }
 
@@ -59,6 +119,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void doSort() {
+        sortedTasks.clear();
+        taskWithoutDate.clear();
         for (Integer k : epicTasks.keySet()) {
             if (k != null) {
                 if (epicTasks.get(k).getStartTime() == null) {
@@ -90,20 +152,19 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public void doTask(Task task) throws IOException {
-        doSort();
+    public void doTask(Task task) throws IOException, InterruptedException {
+
         if (isIntersects(task)) {
             System.out.println("Задача пересекается с другими задачами");
         } else {
-
-
             tasks.put(task.getId(), task);
         }
+        doSort();
     }
 
     @Override
-    public void doEpicTask(Epic epic) throws IOException {
-        doSort();
+    public void doEpicTask(Epic epic) throws IOException, InterruptedException {
+
         if (isIntersects(epic)) {
             System.out.println("Задача пересекается с другими задачами");
         } else {
@@ -117,13 +178,14 @@ public class InMemoryTaskManager implements TaskManager {
 
             }
         }
+        doSort();
 
 
     }
 
     @Override
-    public void doSubTask(SubTask sub) throws IOException {
-        doSort();
+    public void doSubTask(SubTask sub) throws IOException, InterruptedException {
+
         if (isIntersects(sub)) {
             System.out.println("Задача пересекается с другими задачами");
         } else {
@@ -139,6 +201,7 @@ public class InMemoryTaskManager implements TaskManager {
 
             }
         }
+        doSort();
 
 
     }
@@ -171,7 +234,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-
     public List<SubTask> getListOfSub() {
         List<SubTask> subTasks1 = new ArrayList<>();
         for (Integer key : subTasks.keySet()) {
@@ -182,7 +244,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(Task task) throws IOException, IllegalStateException {
+    public void updateTask(Task task) throws IOException, IllegalStateException, InterruptedException {
         doSort();
         if (isIntersects(task)) {
             System.out.println("Задача пересекается с другими задачами");
@@ -207,7 +269,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateEpicTask(Epic epic) throws IOException {
+    public void updateEpicTask(Epic epic) throws IOException, InterruptedException {
         doSort();
         if (isIntersects(epic)) {
             System.out.println("Задача пересекается с другими задачами");
@@ -249,7 +311,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubTask(SubTask subTask) throws IOException {
+    public void updateSubTask(SubTask subTask) throws IOException, InterruptedException {
         doSort();
         if (isIntersects(subTask)) {
             System.out.println("Задача пересекается с другими задачами");
@@ -289,13 +351,16 @@ public class InMemoryTaskManager implements TaskManager {
             if (!epicTasks.containsKey(id)) {
                 throw new IllegalStateException("Задача не найдена.");
             } else {
-                Task epic = epicTasks.get(id);
-                if (historyManager != null) {
 
-                    historyManager.add(epic);
+                if (historyManager != null) {
+                    Epic epic = epicTasks.get(id);
+                    if (epic != null) {
+                        historyManager.add(epic);
+                    }
                 }
 
                 return epicTasks.get(id);
+
             }
         }
         return null;
@@ -315,12 +380,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void clearTasks() throws IOException {
+    public void clearTasks() throws IOException, InterruptedException {
+
         tasks.clear();
     }
 
     @Override
-    public void clearEpicTasks() throws IOException {
+    public void clearEpicTasks() throws IOException, InterruptedException {
         epicTasks.clear();
     }
 
@@ -340,10 +406,11 @@ public class InMemoryTaskManager implements TaskManager {
                 tasks.remove(id);
             }
         }
+
     }
 
     @Override
-    public void removeSubTask(int id) throws IOException {
+    public void removeSubTask(int id) throws IOException, InterruptedException {
         if (!subTasks.containsKey(id)) {
             throw new IllegalStateException("Задача не найдена.");
         } else {
@@ -351,7 +418,10 @@ public class InMemoryTaskManager implements TaskManager {
             subTasks.remove(id);
             SubTask subTask = subTasks.get(id);
             if (subTask != null) {
+
                 updateEpicTask(epicTasks.get(subTask.getEpicObject()));
+
+
             }
         }
     }

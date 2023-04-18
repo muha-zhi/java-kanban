@@ -15,22 +15,20 @@ public interface TaskManager {
     public int getIdOfAll();
 
     public void setIdOfAll(int idOfAll);
+
     public List<Task> getPrioritizedTasks();
 
-   public  void doSort();
+
+    public void doSort();
 
 
+    public void doTask(Task task) throws IOException, InterruptedException;
 
 
+    public void doEpicTask(Epic epic) throws IOException, InterruptedException;
 
 
-    public void doTask(Task task) throws IOException;
-
-
-    public void doEpicTask(Epic epic) throws IOException;
-
-
-    public void doSubTask(SubTask sub) throws IOException;
+    public void doSubTask(SubTask sub) throws IOException, InterruptedException;
 
 
     public List<Epic> getListOfEpic() throws NullPointerException;
@@ -42,13 +40,13 @@ public interface TaskManager {
     public List<SubTask> getListOfSub() throws NullPointerException;
 
 
-    public void updateTask(Task task) throws IOException;
+    public void updateTask(Task task) throws IOException, InterruptedException;
 
 
-    public void updateEpicTask(Epic epic) throws IOException;
+    public void updateEpicTask(Epic epic) throws IOException, InterruptedException;
 
 
-    public void updateSubTask(SubTask subTask) throws IOException;
+    public void updateSubTask(SubTask subTask) throws IOException, InterruptedException;
 
 
     public SubTask getSubTask(int id) throws ManagerSaveException, NullPointerException;
@@ -59,9 +57,9 @@ public interface TaskManager {
     public Task getTask(int id) throws ManagerSaveException, NullPointerException;
 
 
-    public void clearTasks() throws IOException;
+    public void clearTasks() throws IOException, InterruptedException;
 
-    public void clearEpicTasks() throws IOException;
+    public void clearEpicTasks() throws IOException, InterruptedException;
 
 
     public void clearSubTasks() throws IOException;
@@ -69,7 +67,7 @@ public interface TaskManager {
 
     public void removeTask(int id) throws IOException;
 
-    public void removeSubTask(int id) throws IOException;
+    public void removeSubTask(int id) throws IOException, InterruptedException;
 
 
     public void removeEpicTask(int id) throws IOException;
@@ -77,8 +75,7 @@ public interface TaskManager {
 
     public List<SubTask> getSubsOfEpic(int id);
 
- public boolean isIntersects(Task task);
-
+    public boolean isIntersects(Task task);
 
 
 }

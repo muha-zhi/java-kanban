@@ -1,22 +1,35 @@
 package taskTrecker.tasks;
 
 
+import com.google.gson.annotations.Expose;
 import taskTrecker.tasks.manager.Managers;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class Task  {
-
+public class Task {
+    @Expose
     protected String name;
+    @Expose
     protected String description;
+    @Expose
     protected StatusOfTask status = StatusOfTask.NEW;
-
+    @Expose
     protected LocalDateTime startTime;
+    @Expose
     protected Duration duration;
 
-
+    @Expose
     private int id = 0;
+
+    public Task() {
+        this.name = null;
+        this.description = null;
+        this.status = StatusOfTask.NEW;
+        this.startTime = null;
+        this.duration = null;
+        this.id = 0;
+    }
 
 
     public Task(String name, String description, StatusOfTask status, LocalDateTime startTime, Duration duration, int id) {
@@ -27,6 +40,7 @@ public class Task  {
         this.duration = duration;
         this.id = id;
     }
+
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
@@ -54,14 +68,12 @@ public class Task  {
     }
 
 
-
-
-    public LocalDateTime getEndTime(){
+    public LocalDateTime getEndTime() {
         LocalDateTime time = null;
-        if(startTime != null && duration != null) {
+        if (startTime != null && duration != null) {
             time = startTime.plusMinutes(duration.toMinutes());
         }
-       return time;
+        return time;
     }
 
     public Duration getDuration() {
@@ -74,7 +86,7 @@ public class Task  {
 
     public LocalDateTime getStartTime() {
 
-            return startTime;
+        return startTime;
 
 
     }
@@ -119,7 +131,6 @@ public class Task  {
         return "Task{" + "name='" + name + '\'' + ", description='" + description + '\'' + ", status='" + status + '\''
                 + ", id=" + id + '}' + " ";
     }
-
 
 
     @Override

@@ -1,8 +1,14 @@
 package taskTrecker.history;
 
+import com.google.gson.annotations.Expose;
+
 public class Node<T> {
+@Expose
     T data;
+
     Node<T> prev = null;
+
+
     Node<T> next = null;
 
 
@@ -11,13 +17,23 @@ public class Node<T> {
 
     }
 
+    public T getData() {
+        return data;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        @SuppressWarnings("unchecked")
-        Node<T> node = (Node<T>) o;
-        return data.equals(node.data) && next.equals(node.next) && prev.equals(node.prev);
+
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            @SuppressWarnings("unchecked")
+            Node<T> node = (Node<T>) o;
+            if(node != null) {
+                return data.equals(node.data) && next.equals(node.next) && prev.equals(node.prev);
+            }
+            return false;
+
+
     }
 
     @Override

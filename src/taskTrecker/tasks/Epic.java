@@ -1,17 +1,25 @@
 package taskTrecker.tasks;
 
+import com.google.gson.annotations.Expose;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
 
 public class Epic extends Task {
-
+    @Expose(serialize = false, deserialize = false)
     private List<SubTask> subsOfThisEpic = new ArrayList<>();
-
+    @Expose(serialize = false, deserialize = false)
     private Set<SubTask> sortedSubsOfThisEpic = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+    @Expose
+    private LocalDateTime endTime = null;
 
-    private LocalDateTime endTime;
+
+    public Epic() {
+        super();
+
+    }
 
     public Epic(String name, String description, StatusOfTask status, LocalDateTime startTime, Duration duration,
                 int id) {
@@ -85,10 +93,22 @@ public class Epic extends Task {
         return subsOfThisEpic;
     }
 
+    public Set<SubTask> getSortedSubsOfThisEpic() {
+        return sortedSubsOfThisEpic;
+    }
+
+
     public void addSubForEpic(SubTask s) {
 
+        Set<SubTask> sort = getSortedSubsOfThisEpic();
+
         subsOfThisEpic.add(s);
-        sortedSubsOfThisEpic.add(s);
+
+        if (s != null && s.getStartTime() != null && s.getEndTime() != null && sort != null) {
+            sort.add(s);
+        }
+
+
     }
 
     public void setSubsOfThisEpic(List<SubTask> subsOfThisEpic) {

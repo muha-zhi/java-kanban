@@ -1,5 +1,6 @@
 package taskTrecker.history;
 
+import com.google.gson.annotations.Expose;
 import taskTrecker.tasks.Task;
 
 import java.util.ArrayList;
@@ -8,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-
+@Expose
     private final CustomLinkedList<Task> history = new CustomLinkedList<>();
+@Expose
     private final Map<Integer, Node<Task>> tasksToRemove = new HashMap<>();
 
     @Override
@@ -27,8 +29,10 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void remove(Task task) {
         if (task != null) {
             if (tasksToRemove.containsKey(task.getId())) {
-                history.removeNode(tasksToRemove.get(task.getId()));
-                tasksToRemove.remove(task.getId());
+                if(tasksToRemove.get(task.getId()) != null) {
+                    history.removeNode(tasksToRemove.get(task.getId()));
+                    tasksToRemove.remove(task.getId());
+                }
             }
         }
 
@@ -58,6 +62,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
+    public Map<Integer, Node<Task>> getTasksToRemove() {
+        return tasksToRemove;
+    }
+
     @Override
     public List<Task> getHistory() {
 
@@ -78,9 +86,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     static class CustomLinkedList<T> {
-
+@Expose
         private Node<T> head;
+@Expose
         private Node<T> tail;
+
         int size = 0;
 
         public CustomLinkedList() {
@@ -130,11 +140,13 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         public void removeTail() {
-            if (head.next == null) {
-                head = null;
-            } else {
-                tail.prev.next = null;
-                tail = tail.prev;
+            if(head != null) {
+                if (head.next == null) {
+                    head = null;
+                } else {
+                    tail.prev.next = null;
+                    tail = tail.prev;
+                }
             }
             size--;
 

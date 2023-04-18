@@ -1,17 +1,24 @@
 package taskTrecker.tasks;
 
 
+import com.google.gson.annotations.Expose;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class SubTask extends Task {
 
+    @Expose
     private int epicObject;
 
     public SubTask(String name, String description, StatusOfTask status, LocalDateTime startTime, Duration duration
             , int epicObject, int id) {
         super(name, description, status, startTime, duration, id);
         this.epicObject = epicObject;
+    }
+
+    public SubTask() {
+        super();
     }
 
     public SubTask(String name, String description) {

@@ -26,7 +26,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
 
     @BeforeEach
-    public void afterEach() throws IOException {
+    public void afterEach() throws IOException, InterruptedException {
         manager.clearEpicTasks();
         manager.clearTasks();
         manager.clearSubTasks();
@@ -36,7 +36,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
 
     @Test
-    public void shouldDoTaskWhenMapIsEmpty() throws IOException {
+    public void shouldDoTaskWhenMapIsEmpty() throws IOException, InterruptedException {
         Task task = new Task("name", "dis");
         assertTrue(manager.getListOfTask().isEmpty());
         manager.doTask(task);
@@ -46,7 +46,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldDoTaskInStandard() throws IOException {
+    public void shouldDoTaskInStandard() throws IOException, InterruptedException {
         Task task = new Task("name", "dis");
         manager.doTask(task);
         assertFalse(manager.getListOfTask().isEmpty());
@@ -59,7 +59,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
 
     @Test
-    public void shouldDoEpicWhenMapIsEmpty() throws IOException {
+    public void shouldDoEpicWhenMapIsEmpty() throws IOException, InterruptedException {
         Epic task = new Epic("name", "dis");
         assertTrue(manager.getListOfEpic().isEmpty());
         manager.doEpicTask(task);
@@ -69,7 +69,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldDoEpicInStandard() throws IOException {
+    public void shouldDoEpicInStandard() throws IOException, InterruptedException {
         Epic task = new Epic("name", "dis");
         manager.doEpicTask(task);
         assertFalse(manager.getListOfEpic().isEmpty());
@@ -82,7 +82,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
 
     @Test
-    public void shouldDoSubTaskWhenMapIsEmpty() throws IOException {
+    public void shouldDoSubTaskWhenMapIsEmpty() throws IOException, InterruptedException {
         SubTask task = new SubTask("name", "dis");
         assertTrue(manager.getListOfSub().isEmpty());
         manager.doSubTask(task);
@@ -92,7 +92,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldDoSubTaskInStandard() throws IOException {
+    public void shouldDoSubTaskInStandard() throws IOException, InterruptedException {
         SubTask task = new SubTask("name", "dis");
         manager.doSubTask(task);
         assertFalse(manager.getListOfSub().isEmpty());
@@ -112,7 +112,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldReturnListOfTaskInStandard() throws IOException {
+    public void shouldReturnListOfTaskInStandard() throws IOException, InterruptedException {
 
         Task task = new Task("name", "dis", 1);
 
@@ -131,7 +131,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldReturnListOfEpicInStandard() throws IOException {
+    public void shouldReturnListOfEpicInStandard() throws IOException, InterruptedException {
 
         Epic task = new Epic("name", "dis", 1);
 
@@ -150,7 +150,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldReturnListOfSubTaskInStandard() throws IOException {
+    public void shouldReturnListOfSubTaskInStandard() throws IOException, InterruptedException {
 
         SubTask task = new SubTask("name", "dis", 1);
 
@@ -162,7 +162,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldUpdateTaskInStandard() throws IOException {
+    public void shouldUpdateTaskInStandard() throws IOException, InterruptedException {
         Task task = new Task("name", "dis", 1);
         manager.doTask(task);
 
@@ -193,7 +193,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldUpdateSubTaskInStandard() throws IOException {
+    public void shouldUpdateSubTaskInStandard() throws IOException, InterruptedException {
         SubTask task = new SubTask("name", "dis", 1);
         manager.doSubTask(task);
 
@@ -224,7 +224,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldUpdateEpicTaskInStandard() throws IOException {
+    public void shouldUpdateEpicTaskInStandard() throws IOException, InterruptedException {
         Epic task = new Epic("name", "dis", 1);
         manager.doEpicTask(task);
 
@@ -255,7 +255,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldRemoveTaskInStandard() throws IOException {
+    public void shouldRemoveTaskInStandard() throws IOException, InterruptedException {
         manager.doTask(new Task("name", "dis", 1));
         assertEquals(new Task("name", "dis", 1), manager.getTask(1));
         manager.removeTask(1);
@@ -285,7 +285,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldRemoveEpicTaskInStandard() throws IOException {
+    public void shouldRemoveEpicTaskInStandard() throws IOException, InterruptedException {
         manager.doEpicTask(new Epic("name", "dis", 1));
         assertEquals(new Epic("name", "dis", 1), manager.getEpicTask(1));
         manager.removeEpicTask(1);
@@ -315,7 +315,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldRemoveSubTaskInStandard() throws IOException {
+    public void shouldRemoveSubTaskInStandard() throws IOException, InterruptedException {
         manager.doSubTask(new SubTask("name", "dis", 1));
         assertEquals(new SubTask("name", "dis", 1), manager.getSubTask(1));
         manager.removeSubTask(1);
@@ -345,7 +345,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldClearMapOfTasksInStandard() throws IOException {
+    public void shouldClearMapOfTasksInStandard() throws IOException, InterruptedException {
         manager.doTask(new Task("name", "dis"));
         assertEquals(1, manager.getListOfTask().size());
         manager.clearTasks();
@@ -353,7 +353,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldClearMapOfTasksWhenSizeNull() throws IOException {
+    public void shouldClearMapOfTasksWhenSizeNull() throws IOException, InterruptedException {
 
         assertEquals(0, manager.getListOfTask().size());
         manager.clearTasks();
@@ -361,7 +361,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldClearMapOfSubTaskTasksInStandard() throws IOException {
+    public void shouldClearMapOfSubTaskTasksInStandard() throws IOException, InterruptedException {
         manager.doSubTask(new SubTask("name", "dis"));
         assertEquals(1, manager.getListOfSub().size());
         manager.clearSubTasks();
@@ -377,7 +377,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldClearMapOfEpicTaskTasksInStandard() throws IOException {
+    public void shouldClearMapOfEpicTaskTasksInStandard() throws IOException, InterruptedException {
         manager.doEpicTask(new Epic("name", "dis"));
         assertEquals(1, manager.getListOfEpic().size());
         manager.clearEpicTasks();
@@ -385,7 +385,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldClearMapOfEpicTasksWhenSizeNull() throws IOException {
+    public void shouldClearMapOfEpicTasksWhenSizeNull() throws IOException, InterruptedException {
 
         assertEquals(0, manager.getListOfEpic().size());
         manager.clearEpicTasks();
@@ -393,7 +393,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldNotDoTaskIfIsIntersects() throws IOException {
+    public void shouldNotDoTaskIfIsIntersects() throws IOException, InterruptedException {
         manager.doTask(new Task("name", "dis", LocalDateTime.of(2023, 1, 1
                 , 12, 0), Duration.ofMinutes(15)));
         assertEquals(1, manager.getListOfTask().size());

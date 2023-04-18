@@ -37,18 +37,17 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
     }
 
     @AfterEach
-    public void afterEach() throws IOException {
+    public void afterEach() throws IOException, InterruptedException {
         fileBackedTasksManager.historyManager.clearHistory();
         fileBackedTasksManager.setIdOfAll(0);
-
         manager.clearEpicTasks();
         manager.clearTasks();
         manager.clearSubTasks();
-        manager.setIdOfAll(0);
+
     }
 
     @Test
-    public void shouldLoadFromFileEmptyMaps() throws IOException {
+    public void shouldLoadFromFileEmptyMaps() throws IOException, InterruptedException {
 
 
         fileBackedTasksManager.save();
@@ -71,7 +70,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest {
     }
 
     @Test
-    public void shouldLoadFromFileEmptyIfHistoryEmpty() throws IOException {
+    public void shouldLoadFromFileEmptyIfHistoryEmpty() throws IOException{
 
         fileBackedTasksManager.doEpicTask(new Epic("name", "dis", LocalDateTime.of(2023, 1
                 , 1, 12, 0), Duration.ofMinutes(10)));

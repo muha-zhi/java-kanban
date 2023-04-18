@@ -18,9 +18,9 @@ class EpicTest {
     Epic epic;
 
     @BeforeEach
-    public void beforeEach() throws IOException {
+    public void beforeEach() throws IOException, InterruptedException {
         manager = new InMemoryTaskManager();
-        manager.doEpicTask(new Epic("name", "dis"));
+        manager.doEpicTask(new Epic("name", "dis", 1));
         epic = manager.getEpicTask(1);
     }
 
@@ -30,7 +30,7 @@ class EpicTest {
     }
 
     @Test
-    public void shouldNewStatusIfInListOnlyNew() throws IOException {
+    public void shouldNewStatusIfInListOnlyNew() throws IOException, InterruptedException {
         if (epic != null) {
             SubTask subTask = new SubTask("Name s", "dis s");
             subTask.setEpicObject(epic.getId());
@@ -43,7 +43,7 @@ class EpicTest {
     }
 
     @Test
-    public void shouldNewStatusIfInListOnlyDone() throws IOException {
+    public void shouldNewStatusIfInListOnlyDone() throws IOException, InterruptedException {
         if (epic != null) {
             SubTask subTask = new SubTask("Name s", "dis s");
             subTask.setEpicObject(epic.getId());
@@ -58,7 +58,7 @@ class EpicTest {
     }
 
     @Test
-    public void shouldInProgressStatusIfInListDoneAndNew() throws IOException {
+    public void shouldInProgressStatusIfInListDoneAndNew() throws IOException, InterruptedException {
         if (epic != null) {
             SubTask subTask = new SubTask("Name s", "dis s");
             subTask.setEpicObject(epic.getId());
@@ -73,7 +73,7 @@ class EpicTest {
     }
 
     @Test
-    public void shouldInProgressStatusIfInListInProgress() throws IOException {
+    public void shouldInProgressStatusIfInListInProgress() throws IOException, InterruptedException {
         if (epic != null) {
             SubTask subTask = new SubTask("Name s", "dis s");
             subTask.setEpicObject(epic.getId());

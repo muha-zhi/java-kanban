@@ -29,11 +29,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public FileBackedTasksManager() {
         super();
-
     }
 
 
-    public void save() throws ManagerSaveException {
+    public void save() throws IOException, InterruptedException {
 
         try (FileWriter writer = new FileWriter(file, false)) {
             if (!epicTasks.isEmpty()) {
@@ -82,6 +81,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
 
         return idToInt;
+
+    }
+
+    public void main(String[] args) {
 
     }
 
@@ -189,107 +192,180 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public void doTask(Task task) throws IOException {
-        super.doTask(task);
-        save();
+        try {
+            super.doTask(task);
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public void doEpicTask(Epic epic) throws IOException {
-        super.doEpicTask(epic);
-        save();
+        try {
+            super.doEpicTask(epic);
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
     @Override
     public void doSubTask(SubTask sub) throws IOException {
-        super.doSubTask(sub);
-        save();
+        try {
+            super.doSubTask(sub);
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
 
     @Override
     public void updateTask(Task task) throws IOException {
-        super.updateTask(task);
-        save();
+        try {
+            super.updateTask(task);
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public void updateEpicTask(Epic epic) throws IOException {
-        super.updateEpicTask(epic);
-        save();
+        try {
+            super.updateEpicTask(epic);
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public void updateSubTask(SubTask subTask) throws IOException {
 
-        super.updateSubTask(subTask);
-        save();
+        try {
+            super.updateSubTask(subTask);
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public void clearTasks() throws IOException {
 
-        super.clearTasks();
-        save();
+        try {
+            super.clearTasks();
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public void clearEpicTasks() throws IOException {
-        super.clearEpicTasks();
-        save();
+        try {
+            super.clearEpicTasks();
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void clearSubTasks() throws IOException {
-        super.clearSubTasks();
-        save();
+
+        try {
+            super.clearSubTasks();
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void removeTask(int id) throws IOException {
         super.removeTask(id);
-        save();
+        try {
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public void removeSubTask(int id) throws IOException {
+    public void removeSubTask(int id) throws IOException, InterruptedException {
         super.removeSubTask(id);
-        save();
+        try {
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void removeEpicTask(int id) throws IOException {
 
         super.removeEpicTask(id);
-        save();
+        try {
+            save();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
 
     @Override
     public SubTask getSubTask(int id) throws ManagerSaveException {
+        SubTask subTask = super.getSubTask(id);
+        try {
 
-        save();
+            save();
+            return subTask;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-        return super.getSubTask(id);
 
     }
 
     @Override
     public Epic getEpicTask(int id) throws ManagerSaveException {
-        save();
-        return super.getEpicTask(id);
+        Epic epic = super.getEpicTask(id);
+        try {
+
+            save();
+            return epic;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
 
 
     @Override
     public Task getTask(int id) throws ManagerSaveException {
+        Task task = super.getTask(id);
+        try {
 
-        save();
+            save();
+            return task;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-        return super.getTask(id);
+
     }
 
     public static FileBackedTasksManager loadFromFile(File file) throws IOException {
