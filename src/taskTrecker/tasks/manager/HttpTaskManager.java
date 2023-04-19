@@ -21,12 +21,10 @@ import java.util.Map;
 
 public class HttpTaskManager extends FileBackedTasksManager {
     @Expose
-    private final static String KEY = "key123";
+    private static final String KEY = "key123";
 
     @Expose
     private KVTaskClient client;
-
-
 
 
     public void setClient(KVTaskClient client) {
@@ -101,11 +99,11 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
             List<Task> tasks = new ArrayList<>();
             if (manager != null) {
-                Map<Integer, Node<Task>> t = manager.historyManager.getTasksToRemove();
-                if (t != null) {
-                    for (Integer k : t.keySet()) {
+                Map<Integer, Node<Task>> nodes = manager.historyManager.getTasksToRemove();
+                if (nodes != null) {
+                    for (Integer k : nodes.keySet()) {
 
-                        Task task1 = t.get(k).getData();
+                        Task task1 = nodes.get(k).getData();
                         if (task1 != null) {
                             tasks.add(task1);
                         }
@@ -123,7 +121,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
             return manager;
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
 

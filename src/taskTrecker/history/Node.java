@@ -3,7 +3,7 @@ package taskTrecker.history;
 import com.google.gson.annotations.Expose;
 
 public class Node<T> {
-@Expose
+    @Expose
     T data;
 
     Node<T> prev = null;
@@ -24,14 +24,12 @@ public class Node<T> {
     @Override
     public boolean equals(Object o) {
 
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            @SuppressWarnings("unchecked")
-            Node<T> node = (Node<T>) o;
-            if(node != null) {
-                return data.equals(node.data) && next.equals(node.next) && prev.equals(node.prev);
-            }
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        @SuppressWarnings("unchecked")
+        Node<T> node = (Node<T>) o;
+
+        return data.equals(node.data) && next.equals(node.next) && prev.equals(node.prev);
 
 
     }

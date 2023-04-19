@@ -84,9 +84,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     }
 
-    public void main(String[] args) {
-
-    }
 
     public static String historyToString(HistoryManager manager) {
 
@@ -196,7 +193,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.doTask(task);
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
     }
@@ -207,7 +204,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.doEpicTask(epic);
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
 
@@ -219,7 +216,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.doSubTask(sub);
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
 
@@ -231,7 +228,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.updateTask(task);
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
     }
@@ -242,7 +239,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.updateEpicTask(epic);
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
     }
@@ -254,7 +251,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.updateSubTask(subTask);
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
     }
@@ -266,7 +263,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.clearTasks();
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
     }
@@ -277,7 +274,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.clearEpicTasks();
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
     }
 
@@ -288,7 +285,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             super.clearSubTasks();
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
     }
 
@@ -298,7 +295,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try {
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
     }
 
@@ -308,7 +305,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try {
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
     }
 
@@ -319,7 +316,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try {
             save();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
 
@@ -333,7 +330,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             save();
             return subTask;
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
 
@@ -347,7 +344,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             save();
             return epic;
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
 
@@ -362,7 +359,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             save();
             return task;
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException(e);
         }
 
 
@@ -432,36 +429,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
         return manager;
     }
-/*
-   public static void main(String[] args) throws IOException {
 
-
-        FileBackedTasksManager fileBackedTasksManager1 = new FileBackedTasksManager(new File("C:\\Users" +
-                "\\mzile\\dev\\java-kanban\\src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
-
-        Task task = new Task("nnnn", "ggggg");
-
-        fileBackedTasksManager1.doTask(task);
-        Task task2 = new Task("nnnnn","jvkjgugu");
-
-        fileBackedTasksManager1.doTask(task2);
-        fileBackedTasksManager1.getTask(1);
-        fileBackedTasksManager1.getTask(2);
-
-
-        System.out.println(fileBackedTasksManager1);
-        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File("src" +
-                "\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
-        System.out.println(fileBackedTasksManager);
-
-    }
-
- */
-
-    @Override
-    public String toString() {
-        return super.toString();
-    }
 
     static List<String> readFileContents(File path) {
         try {

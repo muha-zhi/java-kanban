@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-@Expose
+    @Expose
     private final CustomLinkedList<Task> history = new CustomLinkedList<>();
-@Expose
+    @Expose
     private final Map<Integer, Node<Task>> tasksToRemove = new HashMap<>();
 
     @Override
@@ -29,10 +29,10 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void remove(Task task) {
         if (task != null) {
             if (tasksToRemove.containsKey(task.getId())) {
-                if(tasksToRemove.get(task.getId()) != null) {
-                    history.removeNode(tasksToRemove.get(task.getId()));
-                    tasksToRemove.remove(task.getId());
-                }
+
+                history.removeNode(tasksToRemove.get(task.getId()));
+                tasksToRemove.remove(task.getId());
+
             }
         }
 
@@ -86,9 +86,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     static class CustomLinkedList<T> {
-@Expose
+        @Expose
         private Node<T> head;
-@Expose
+        @Expose
         private Node<T> tail;
 
         int size = 0;
@@ -132,15 +132,24 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (head.next == null) {
                 head = null;
             } else {
-                head.next.prev = null;
-                head = head.next;
+                if(head.next == tail){
+                    head = tail;
+                    head.prev = null;
+                    head.next = null;
+                    tail = null;
+
+
+                } else {
+                    head.next.prev = null;
+                    head = head.next;
+                }
             }
             size--;
 
         }
 
         public void removeTail() {
-            if(head != null) {
+            if (head != null) {
                 if (head.next == null) {
                     head = null;
                 } else {

@@ -11,9 +11,9 @@ public class SubTask extends Task {
     @Expose
     private int epicObject;
 
-    public SubTask(String name, String description, StatusOfTask status, LocalDateTime startTime, Duration duration
+    public SubTask(String name, String description, LocalDateTime startTime, Duration duration
             , int epicObject, int id) {
-        super(name, description, status, startTime, duration, id);
+        super(name, description, startTime, duration, id);
         this.epicObject = epicObject;
     }
 

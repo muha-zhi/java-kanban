@@ -12,70 +12,70 @@ import java.util.List;
 public interface TaskManager {
 
 
-    public int getIdOfAll();
+     int getIdOfAll();
 
-    public void setIdOfAll(int idOfAll);
+     void setIdOfAll(int idOfAll);
 
-    public List<Task> getPrioritizedTasks();
-
-
-    public void doSort();
+     List<Task> getPrioritizedTasks();
 
 
-    public void doTask(Task task) throws IOException, InterruptedException;
+     void doSort();
 
 
-    public void doEpicTask(Epic epic) throws IOException, InterruptedException;
+     void doTask(Task task) throws IOException, InterruptedException;
 
 
-    public void doSubTask(SubTask sub) throws IOException, InterruptedException;
+     void doEpicTask(Epic epic) throws IOException, InterruptedException;
 
 
-    public List<Epic> getListOfEpic() throws NullPointerException;
+     void doSubTask(SubTask sub) throws IOException, InterruptedException;
 
 
-    public List<Task> getListOfTask() throws NullPointerException;
+     List<Epic> getListOfEpic() throws NullPointerException;
 
 
-    public List<SubTask> getListOfSub() throws NullPointerException;
+     List<Task> getListOfTask() throws NullPointerException;
 
 
-    public void updateTask(Task task) throws IOException, InterruptedException;
+     List<SubTask> getListOfSub() throws NullPointerException;
 
 
-    public void updateEpicTask(Epic epic) throws IOException, InterruptedException;
+     void updateTask(Task task) throws IOException, InterruptedException;
 
 
-    public void updateSubTask(SubTask subTask) throws IOException, InterruptedException;
+     void updateEpicTask(Epic epic) throws IOException, InterruptedException;
 
 
-    public SubTask getSubTask(int id) throws ManagerSaveException, NullPointerException;
+     void updateSubTask(SubTask subTask) throws IOException, InterruptedException;
 
 
-    public Epic getEpicTask(int id) throws ManagerSaveException, NullPointerException;
-
-    public Task getTask(int id) throws ManagerSaveException, NullPointerException;
+     SubTask getSubTask(int id) throws ManagerSaveException, NullPointerException;
 
 
-    public void clearTasks() throws IOException, InterruptedException;
+     Epic getEpicTask(int id) throws ManagerSaveException, NullPointerException;
 
-    public void clearEpicTasks() throws IOException, InterruptedException;
-
-
-    public void clearSubTasks() throws IOException;
+     Task getTask(int id) throws ManagerSaveException, NullPointerException;
 
 
-    public void removeTask(int id) throws IOException;
+     void clearTasks() throws IOException, InterruptedException;
 
-    public void removeSubTask(int id) throws IOException, InterruptedException;
-
-
-    public void removeEpicTask(int id) throws IOException;
+     void clearEpicTasks() throws IOException, InterruptedException;
 
 
-    public List<SubTask> getSubsOfEpic(int id);
+     void clearSubTasks() throws IOException;
 
-    public boolean isIntersects(Task task);
+
+     void removeTask(int id) throws IOException;
+
+     void removeSubTask(int id) throws IOException, InterruptedException;
+
+
+     void removeEpicTask(int id) throws IOException;
+
+
+     List<SubTask> getSubsOfEpic(int id);
+
+     boolean isIntersects(Task task);
 
 
 }

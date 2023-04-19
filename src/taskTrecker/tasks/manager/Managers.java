@@ -9,14 +9,14 @@ import java.io.IOException;
 public class Managers {
 
 
-    private static TaskManager managerOfTask;
+    private static InMemoryTaskManager managerOfTask;
     private static InMemoryHistoryManager historyManager;
 
     private static HttpTaskManager HttpManager;
 
     private static FileBackedTasksManager fileBackedTasksManager;
 
-    public static TaskManager getDefault() {
+    public static InMemoryTaskManager getDefault() {
 
         if (managerOfTask == null) {
             managerOfTask = new InMemoryTaskManager();
@@ -46,8 +46,7 @@ public class Managers {
 
     public static FileBackedTasksManager getFileManager() {
         if (fileBackedTasksManager == null) {
-            fileBackedTasksManager = new FileBackedTasksManager(new File("C:\\Users" +
-                    "\\mzile\\dev\\java-kanban\\src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
+            fileBackedTasksManager = new FileBackedTasksManager(new File("src\\taskTrecker\\resources\\res.csv").getAbsoluteFile());
         }
         return fileBackedTasksManager;
     }

@@ -32,10 +32,9 @@ public class Task {
     }
 
 
-    public Task(String name, String description, StatusOfTask status, LocalDateTime startTime, Duration duration, int id) {
+    public Task(String name, String description, LocalDateTime startTime, Duration duration, int id) {
         this.name = name;
         this.description = description;
-        this.status = status;
         this.startTime = startTime;
         this.duration = duration;
         this.id = id;
